@@ -196,10 +196,12 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/env:
 	mkdir -p $(dir $@)
 	# set up venv directory
-	python3 -m venv ./.build/env
-
+	python3 -m venv .build/env
+	
 	# debug -check dir contents (pip failing)
 	ls .build/env/bin/
+
+	. .build/env/bin/activate
 
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
@@ -208,13 +210,13 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/dev-requirements.timestamp: .build/env dev-requirements.txt
 	mkdir -p $(dir $@)
-	.build/env/bin/pip install -r dev-requirements.txt > /dev/null 2>&1
+	pip install -r dev-requirements.txt > /dev/null 2>&1
 	touch $@
 
 .build/requirements.timestamp: .build/env setup.py requirements.txt
 	mkdir -p $(dir $@)
-	.build/env/bin/pip install numpy==1.17.1
-	.build/env/bin/pip install -r requirements.txt
+	pip install numpy==1.17.1
+	pip install -r requirements.txt
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
@@ -309,11 +311,11 @@ $(HOME)/.transifexrc:
 
 .PHONY: transifex-push
 transifex-push: $(HOME)/.transifexrc
-	.build/env/bin/tx push -s
+	tx push -s
 
 .PHONY: transifex-pull
 transifex-pull: $(HOME)/.transifexrc
-	.build/env/bin/tx pull
+	tx pull
 
 .PHONY: compile_catalog
 compile_catalog: $(HOME)/.transifexrc transifex-pull
