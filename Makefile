@@ -195,11 +195,8 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/env:
 	mkdir -p $(dir $@)
-	# make a first virtualenv to get a recent version of virtualenv
+	# set up venv directory
 	python3 -m venv .build/env
-	# env/bin/env .build/env
-	# remove the temporary virtualenv
-	# rm -rf env
 
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
@@ -213,7 +210,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/requirements.timestamp: .build/env setup.py requirements.txt
 	mkdir -p $(dir $@)
-	.build/env/bin/pip install numpy==1.10.1
+	.build/env/bin/pip install numpy==1.17.1
 	.build/env/bin/pip install -r requirements.txt
 	touch $@
 
