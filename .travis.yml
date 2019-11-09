@@ -4,11 +4,12 @@ cache:
   directories:
   - "$HOME/.cache/pip"
 python:
-- 2.7
+- 3.6
+- 3.7
 addons:
-  postgresql: '9.3'
+  postgresql: '10'
 before_install:
-- sudo apt-get install --no-install-recommends libgdal-dev postgresql-9.3-postgis-2.3
+- sudo apt-get install --no-install-recommends libgdal-dev postgresql-10-postgis-2.4
 install:
 - make install
 - createuser www-data --no-superuser --no-createdb --no-createrole -U postgres
