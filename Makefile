@@ -80,11 +80,11 @@ reinit_all: initdb_force import_admindivs import_recommendations import_contacts
 
 .PHONY: initdb
 initdb:
-	.build/venv/bin/initialize_thinkhazard_db $(INI_FILE)
+	.build/env/bin/initialize_thinkhazard_db $(INI_FILE)
 
 .PHONY: initdb_force
 initdb_force:
-	.build/venv/bin/initialize_thinkhazard_db $(INI_FILE) --force=1
+	.build/env/bin/initialize_thinkhazard_db $(INI_FILE) --force=1
 
 .PHONY: import_admindivs
 import_admindivs: .build/requirements.timestamp \
@@ -95,7 +95,7 @@ import_admindivs: .build/requirements.timestamp \
 		read -r -p "This will remove all the existing data in the administrative divisions table. Continue? [y] " CONTINUE;  \
 	done ; \
 	[ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
-	.build/venv/bin/import_admindivs $(INI_FILE) folder=/tmp/thinkhazard/admindiv/$(DATA)
+	.build/env/bin/import_admindivs $(INI_FILE) folder=/tmp/thinkhazard/admindiv/$(DATA)
 
 /tmp/thinkhazard/admindiv/$(DATA)/%.shp: /tmp/thinkhazard/admindiv/$(DATA)/%.zip
 	unzip -o $< -d /tmp/thinkhazard/admindiv/$(DATA)
@@ -106,51 +106,51 @@ import_admindivs: .build/requirements.timestamp \
 
 .PHONY: import_recommendations
 import_recommendations: .build/requirements.timestamp
-	.build/venv/bin/import_recommendations $(INI_FILE)
+	.build/env/bin/import_recommendations $(INI_FILE)
 
 .PHONY: import_contacts
 import_contacts: .build/requirements.timestamp
-	.build/venv/bin/import_contacts $(INI_FILE)
+	.build/env/bin/import_contacts $(INI_FILE)
 
 .PHONY: harvest
 harvest: .build/requirements.timestamp
-	.build/venv/bin/harvest -v
+	.build/env/bin/harvest -v
 
 .PHONY: download
 download: .build/requirements.timestamp
-	.build/venv/bin/download -v
+	.build/env/bin/download -v
 
 .PHONY: complete
 complete: .build/requirements.timestamp
-	.build/venv/bin/complete -v
+	.build/env/bin/complete -v
 
 .PHONY: process
 process: .build/requirements.timestamp
-	.build/venv/bin/process -v
+	.build/env/bin/process -v
 
 .PHONY: decisiontree
 decisiontree: .build/requirements.timestamp
-	.build/venv/bin/decision_tree -v
+	.build/env/bin/decision_tree -v
 
 .PHONY: publish
 publish: .build/requirements.timestamp
-	.build/venv/bin/publish $(INI_FILE)
+	.build/env/bin/publish $(INI_FILE)
 
 .PHONY: transifex-import
 transifex-import: .build/requirements.timestamp
-	.build/venv/bin/importpo $(INI_FILE)
+	.build/env/bin/importpo $(INI_FILE)
 
 .PHONY: serve_public
 serve_public: install
-	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=public
+	.build/env/bin/pserve --reload $(INI_FILE) --app-name=public
 
 .PHONY: serve_admin
 serve_admin: install
-	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=admin
+	.build/env/bin/pserve --reload $(INI_FILE) --app-name=admin
 
 .PHONY: routes
 routes:
-	.build/venv/bin/proutes $(INI_FILE)
+	.build/env/bin/proutes $(INI_FILE)
 
 .PHONY: check
 check: flake8 jshint bootlint
@@ -169,11 +169,11 @@ modwsgi: .build/apache.timestamp
 
 .PHONY: test
 test: install .build/dev-requirements.timestamp
-	.build/venv/bin/nosetests
+	.build/env/bin/nosetests
 
 .PHONY: dist
-dist: .build/venv
-	.build/venv/bin/python setup.py sdist
+dist: .build/env
+	.build/env/bin/python setup.py sdist
 
 .PHONY: dbtunnel
 dbtunnel:
@@ -183,7 +183,7 @@ dbtunnel:
 .PHONY: watch
 watch: .build/dev-requirements.timestamp
 	@echo "Watching static files..."
-	.build/venv/bin/nosier -p thinkhazard/static "make buildcss"
+	.build/env/bin/nosier -p thinkhazard/static "make buildcss"
 
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
@@ -193,34 +193,33 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc thinkhazard/static/less/$*.less $@
 
-.build/venv:
+.build/env:
 	mkdir -p $(dir $@)
 	# make a first virtualenv to get a recent version of virtualenv
-	venv env
-	# env/bin/pip install venv
-	env/bin/venv .build/env
+	python3 -m venv .build/env
+	# env/bin/env .build/env
 	# remove the temporary virtualenv
-	rm -rf env
+	# rm -rf env
 
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
 	npm install
 	touch $@
 
-.build/dev-requirements.timestamp: .build/venv dev-requirements.txt
+.build/dev-requirements.timestamp: .build/env dev-requirements.txt
 	mkdir -p $(dir $@)
-	.build/venv/bin/pip install -r dev-requirements.txt > /dev/null 2>&1
+	.build/env/bin/pip install -r dev-requirements.txt > /dev/null 2>&1
 	touch $@
 
-.build/requirements.timestamp: .build/venv setup.py requirements.txt
+.build/requirements.timestamp: .build/env setup.py requirements.txt
 	mkdir -p $(dir $@)
-	.build/venv/bin/pip install numpy==1.10.1
-	.build/venv/bin/pip install -r requirements.txt
+	.build/env/bin/pip install numpy==1.10.1
+	.build/env/bin/pip install -r requirements.txt
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
 	mkdir -p $(dir $@)
-	.build/venv/bin/flake8 $?
+	.build/env/bin/flake8 $?
 	touch $@
 
 .build/jshint.timestamp: $(JS_FILES)
@@ -253,8 +252,8 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
 	chmod 755 $@
 
-.build/apache-%.conf: apache.conf .build/venv
-	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import sys; print(sys.path[-1])")#' \
+.build/apache-%.conf: apache.conf .build/env
+	sed -e 's#{{PYTHONPATH}}#$(shell .build/env/bin/python -c "import sys; print(sys.path[-1])")#' \
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
 		-e 's#{{INSTANCEPATH}}#$(INSTANCEPATH)#g' \
 		-e 's#{{INSTANCEADMINPATH}}#$(INSTANCEADMINPATH)#g' \
@@ -296,8 +295,8 @@ cleanall:
 
 .PHONY: extract_messages
 extract_messages:
-	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates thinkhazard/dont_remove_me.enum-i18n
-	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.db-i18n
+	.build/env/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates thinkhazard/dont_remove_me.enum-i18n
+	.build/env/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.db-i18n
 	# removes the creation date to avoid unnecessary git changes
 	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
 
@@ -310,11 +309,11 @@ $(HOME)/.transifexrc:
 
 .PHONY: transifex-push
 transifex-push: $(HOME)/.transifexrc
-	.build/venv/bin/tx push -s
+	.build/env/bin/tx push -s
 
 .PHONY: transifex-pull
 transifex-pull: $(HOME)/.transifexrc
-	.build/venv/bin/tx pull
+	.build/env/bin/tx pull
 
 .PHONY: compile_catalog
 compile_catalog: $(HOME)/.transifexrc transifex-pull
