@@ -11,18 +11,19 @@
     "url": "https://github.com/GFDRR/thinkhazard.git"
   },
   "author": "GFDRR",
-  "license": "BSD",
+  "license": "0BSD",
   "bugs": {
     "url": "https://github.com/GFDRR/thinkhazard/issues"
   },
   "homepage": "https://github.com/GFDRR/thinkhazard",
   "dependencies": {
     "bootlint": "~0.16.7",
-    "bootstrap-less-port": "2.2.1",
+	"bootstrap": "3.4.1",
     "jquery": "~3.4.1",
     "jshint": "~2.10.3",
     "leaflet": "~1.5.1",
     "less": "~3.10.3",
+	"less-plugin-clean-css": "~1.5.1",
     "ol": "~6.1.1",
     "typeahead.js": "~0.11.1",
     "font-awesome": "~4.7.0",
