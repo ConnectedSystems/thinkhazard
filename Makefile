@@ -196,7 +196,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/env:
 	mkdir -p $(dir $@)
 	# set up venv directory
-	python3 -m venv .build/env
+	python3 -m venv ./.build/env
 
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
