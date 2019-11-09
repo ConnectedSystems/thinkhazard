@@ -196,11 +196,11 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/venv:
 	mkdir -p $(dir $@)
 	# make a first virtualenv to get a recent version of virtualenv
-	virtualenv venv
-	venv/bin/pip install virtualenv
-	venv/bin/virtualenv .build/venv
+	venv env
+	# env/bin/pip install venv
+	env/bin/venv .build/env
 	# remove the temporary virtualenv
-	rm -rf venv
+	rm -rf env
 
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)

@@ -17,7 +17,6 @@ The following packages must be installed on the system:
 -   a **recent** node/npm
 -   gcc
 -   python-devel
--   python-virtualenv
 -   apache2
 -   postgis
 
