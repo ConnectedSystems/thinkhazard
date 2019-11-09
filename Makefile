@@ -205,13 +205,13 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/dev-requirements.timestamp: .build/env dev-requirements.txt
 	mkdir -p $(dir $@)
-	.build/env/bin/pip install -r dev-requirements.txt > /dev/null 2>&1
+	.build/env/bin/pip3 install -r dev-requirements.txt > /dev/null 2>&1
 	touch $@
 
 .build/requirements.timestamp: .build/env setup.py requirements.txt
 	mkdir -p $(dir $@)
-	.build/env/bin/pip install numpy==1.17.1
-	.build/env/bin/pip install -r requirements.txt
+	.build/env/bin/pip3 install numpy==1.17.1
+	.build/env/bin/pip3 install -r requirements.txt
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
