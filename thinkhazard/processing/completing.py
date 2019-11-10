@@ -20,6 +20,8 @@
 import logging
 import transaction
 import rasterio
+import rasterio.env
+
 from sqlalchemy import func
 
 from ..models import (
@@ -123,7 +125,7 @@ class Completer(BaseProcessor):
             if not layer.downloaded:
                 return 'No data for layer {}'.format(layer.name())
             try:
-                with rasterio.drivers():
+                with rasterio.Env():
                     with rasterio.open(self.layer_path(layer)) as reader:
                         bounds = reader.bounds
                         if bounds.bottom > bounds.top:
