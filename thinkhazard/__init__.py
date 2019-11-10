@@ -29,7 +29,7 @@ lock_file = os.path.join(os.path.dirname(__file__), 'maintenance.lock')
 try:
     version = subprocess.check_output(['git', 'describe', '--always'],
                                       cwd=os.path.dirname(__file__))
-except Exception as e:
+except Exception:
     version = ''
 
 

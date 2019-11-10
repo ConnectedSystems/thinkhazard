@@ -30,4 +30,5 @@ def populatedb():
     engine = engine_from_config(settings, 'sqlalchemy.')
     initdb(engine, True)
 
+
 populatedb()

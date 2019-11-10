@@ -54,7 +54,7 @@ ADM2[['UpdtField', 'OrigVal', 'Updated', 'FRE', 'ESP', 'LOCAL']] = pd.DataFrame(
 corrections = {'Tookyoo': 'Tokyo', 'Tiba': 'Chiba', 'U.K. of Great Britain and Northern Ireland': 'United Kingdom', 'Norfolkshire': 'Norfolk'}
 tgt_col = 'ADM1_NAME'
 curr_date = datetime.today().strftime('%Y-%m-%d')
-for k, v in corrections.items():
+for k, v in list(corrections.items()):
     ADM1.loc[ADM1.ADM1_NAME == k, ['UpdtField', 'OrigVal', 'Updated', tgt_col]] = [tgt_col, k, curr_date, v]
     ADM2.loc[ADM2.ADM1_NAME == k, ['UpdtField', 'OrigVal', 'Updated', tgt_col]] = [tgt_col, k, curr_date, v]    
     ADM2.loc[ADM2.ADM2_NAME == k, ['UpdtField', 'OrigVal', 'Updated', tgt_col]] = [tgt_col, k, curr_date, v]

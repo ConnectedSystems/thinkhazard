@@ -1,5 +1,5 @@
 import os
-import ConfigParser
+import configparser
 import yaml
 from pyramid.paster import get_appsettings
 
@@ -22,7 +22,7 @@ def load_processing_settings(settings):
     """
     processing_settings_path = settings['processing_settings_path']
     with open(processing_settings_path, 'r') as f:
-        settings.update(yaml.load(f.read()))
+        settings.update(yaml.load(f.read(), Loader=yaml.FullLoader))
 
 
 def load_local_settings(settings, name):
@@ -31,6 +31,6 @@ def load_local_settings(settings, name):
     local_settings_path = os.environ.get(
         'LOCAL_SETTINGS_PATH', settings.get('local_settings_path'))
     if local_settings_path and os.path.exists(local_settings_path):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(local_settings_path)
         settings.update(config.items('app:{}'.format(name)))

@@ -21,7 +21,7 @@ import logging
 import traceback
 import os
 from datetime import datetime
-from urlparse import urlunsplit
+from urllib.parse import urlunsplit
 import requests
 import transaction
 
@@ -66,7 +66,7 @@ class Downloader(BaseProcessor):
                     Layer.downloaded: False
                 })
                 DBSession.flush()
-            except:
+            except Exception:
                 transaction.abort()
                 raise
 
@@ -138,7 +138,7 @@ class Downloader(BaseProcessor):
                 with open(path, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=1024):
                         f.write(chunk)
-            except:
+            except Exception:
                 os.unlink(path)
                 logger.error('Failed to save file: {}'.format(path),
                              exc_info=True)

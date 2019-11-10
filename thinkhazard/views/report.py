@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import datetime
 import math
 
@@ -32,7 +32,7 @@ from sqlalchemy.sql.expression import literal_column
 from shapely.geometry.polygon import Polygon
 
 from geoalchemy2.shape import to_shape, from_shape
-from urlparse import urlunsplit
+from urllib.parse import urlunsplit
 
 from ..models import (
     DBSession,
@@ -70,7 +70,7 @@ _hazardlevel_nodata.order = float('inf')
 def report(request):
     try:
         division_code = request.matchdict.get('divisioncode')
-    except:
+    except Exception:
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"divisioncode"')
 
@@ -128,15 +128,15 @@ def report(request):
             division_bounds = bounds_shifted
 
     feedback_params = {}
-    feedback_params['entry.1144401731'] = u'{} - {}'.format(
+    feedback_params['entry.1144401731'] = '{} - {}'.format(
         division.code, division.name).encode('utf8')
     if selected_hazard is not None:
         feedback_params['entry.93444540'] = \
             HazardType.get(selected_hazard).title.encode('utf8')
 
-    feedback_form_url = u'{}?{}'.format(
+    feedback_form_url = '{}?{}'.format(
         request.registry.settings['feedback_form_url'],
-        urllib.urlencode(feedback_params))
+        urllib.parse.urlencode(feedback_params))
 
     context = {
         'hazards': hazard_types,
@@ -163,7 +163,7 @@ def report_geojson(request):
 
     try:
         resolution = float(request.params.get('resolution'))
-    except:
+    except Exception:
         raise HTTPBadRequest(detail='invalid value for parameter "resolution"')
 
     hazard_type = request.matchdict.get('hazardtype', None)
@@ -387,7 +387,7 @@ def data_source(request):
             .order_by(Layer.return_period) \
             .options(contains_eager(HazardSet.layers)) \
             .one()
-    except:
+    except Exception:
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"hazardset"')
 
@@ -399,13 +399,13 @@ def report_neighbours_geojson(request):
 
     try:
         division_code = request.matchdict.get('divisioncode')
-    except:
+    except Exception:
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"divisioncode"')
 
     try:
         resolution = float(request.params.get('resolution'))
-    except:
+    except Exception:
         raise HTTPBadRequest(detail='invalid value for parameter "resolution"')
 
     try:
@@ -416,7 +416,7 @@ def report_neighbours_geojson(request):
                         (box[2], box[3]), (box[2], box[1]),
                         (box[0], box[1])))
         bbox = from_shape(bbox, srid=4326)
-    except:
+    except Exception:
         raise HTTPBadRequest(detail='invalid value for parameter "bbox"')
 
     simplify = func.ST_Simplify(

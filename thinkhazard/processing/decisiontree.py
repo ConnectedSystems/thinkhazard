@@ -42,13 +42,13 @@ class DecisionMaker(BaseProcessor):
             connection.execute(level_reg_query())
 
             logger.info("Upscaling to PRO")
-            connection.execute(upscaling_query(u'PRO'))
+            connection.execute(upscaling_query('PRO'))
 
             logger.info("Upscaling to COU")
-            connection.execute(upscaling_query(u'COU'))
+            connection.execute(upscaling_query('COU'))
 
             trans.commit()
-        except:
+        except Exception:
             trans.rollback()
             logger.error('An error occurred in decision tree',
                          exc_info=True)

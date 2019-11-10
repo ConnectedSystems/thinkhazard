@@ -106,7 +106,7 @@ class TestHarvesting(unittest.TestCase):
 
     @patch.object(Harvester, 'fetch', return_value=[{
         "id": 1,
-        "name_en": u"Test region",
+        "name_en": "Test region",
         "level": 3
     }])
     def test_valid_region(self, fetch_mock):
@@ -135,7 +135,7 @@ class TestHarvesting(unittest.TestCase):
 
     @patch.object(Harvester, 'fetch', return_value=[{
         "id": 1,
-        "title": u"Test document",
+        "title": "Test document",
         "supplemental_information": ''
     }])
     @patch.object(httplib2.Http, 'request', return_value=(
@@ -146,7 +146,7 @@ class TestHarvesting(unittest.TestCase):
             "hazard_type": 'earthquake',
             "regions": [],
             "supplemental_information": '',
-            "title": u"Test document"
+            "title": "Test document"
         })))
     def test_valid_document(self, request_mock, fetch_mock):
         '''Valid document must be added to database'''
@@ -276,7 +276,7 @@ class TestHarvesting(unittest.TestCase):
 
         self.assertEqual(
             cm.exception.message,
-            u'Geonode returned status 500: {"error_message": "Some error."}')
+            'Geonode returned status 500: {"error_message": "Some error."}')
 
         layer = DBSession.query(Layer).one()
         self.assertEqual(layer.typename, 'hazard:adm2_fu_raster_v3')

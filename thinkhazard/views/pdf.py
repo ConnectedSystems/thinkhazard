@@ -59,7 +59,7 @@ from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
 
-REPORT_ID_REGEX = re.compile('\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?')
+REPORT_ID_REGEX = re.compile(r'\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?')
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +69,7 @@ logger = logging.getLogger(__name__)
 def pdf_cover(request):
     try:
         division_code = request.matchdict.get('divisioncode')
-    except:
+    except Exception:
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"divisioncode"')
     division = get_division(division_code)
@@ -143,7 +143,7 @@ def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
         else:
             logger.error(stderr)
 
-    except:
+    except Exception:
         logger.error(traceback.format_exc())
 
     finally:
@@ -299,11 +299,11 @@ def get_map_report(request):
                 # once the generation has succeeded, rename the file so that
                 # waiting clients know that it is finished
                 # os.rename(file_name_temp, file_name)
-                print 'success'
+                print('success')
             else:
-                print 'error'
+                print('error')
 
-        except:
+        except Exception:
             logger.error(traceback.format_exc())
 
     if path.isfile(file_path):
@@ -355,7 +355,7 @@ def _touch(file):
 def get_divison_code(request):
     try:
         return request.matchdict.get('divisioncode')
-    except:
+    except Exception:
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"divisioncode"')
 

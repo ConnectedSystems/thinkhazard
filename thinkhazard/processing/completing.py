@@ -57,7 +57,7 @@ class Completer(BaseProcessor):
                     HazardSet.processed: None
                 })
                 transaction.commit()
-            except:
+            except Exception:
                 transaction.abort()
                 logger.error('Batch reset to incomplete state failed',
                              exc_info=True)
@@ -103,7 +103,7 @@ class Completer(BaseProcessor):
                 return 'No layer found'
             layers.append(hazardset.layers[0])
         else:
-            for level in (u'LOW', u'MED', u'HIG'):
+            for level in ('LOW', 'MED', 'HIG'):
                 layer = hazardset.layer_by_level(level)
                 if layer is None:
                     return 'No layer for level {}'.format(level)
@@ -137,7 +137,7 @@ class Completer(BaseProcessor):
                                 return (
                                     'All layers should have the same origin,'
                                     ' resolution and size')
-            except:
+            except Exception:
                 logger.error('Layer {} - Error opening file {}'
                              .format(layer.name(),
                                      self.layer_path(layer)),

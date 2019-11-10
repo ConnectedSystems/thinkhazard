@@ -46,7 +46,7 @@ def api_hazardcategory(request):
             .filter(HazardType.mnemonic == hazard_type) \
             .filter(HazardLevel.mnemonic == hazard_level) \
             .one()
-    except:
+    except Exception:
         raise HTTPNotFound()
 
     return {
