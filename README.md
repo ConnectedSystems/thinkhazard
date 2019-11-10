@@ -32,7 +32,11 @@ Install postgres `unaccent` extension database engine :
 
     $ sudo apt install postgresql-contrib
     
-Edit `/etc/postgresql/9.5/main/postgresql.conf`, and set `max_prepared_transactions` to 10
+Install postgres scripts extension:
+
+    $ sudo apt install postgresql-10-postgis-scripts
+    
+Edit `/etc/postgresql/10/main/postgresql.conf`, and set `max_prepared_transactions` to 10
 
 Create a database:
 
