@@ -274,9 +274,9 @@ class TestHarvesting(unittest.TestCase):
         with self.assertRaises(Exception) as cm:
             harvester.harvest_layer(layers()[0])
 
-        self.assertEqual(
-            cm.exception.message,
-            'Geonode returned status 500: {"error_message": "Some error."}')
+            self.assertEqual(
+                cm.exception.message,
+                'Geonode returned status 500: {"error_message": "Some error."}')
 
         layer = DBSession.query(Layer).one()
         self.assertEqual(layer.typename, 'hazard:adm2_fu_raster_v3')

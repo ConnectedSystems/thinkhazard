@@ -214,13 +214,13 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/requirements.timestamp: .build/env setup.py requirements.txt
 	mkdir -p $(dir $@)
-	pip install numpy==1.17.1
+	# pip install numpy==1.17.1
 	pip install -r requirements.txt
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
 	mkdir -p $(dir $@)
-	.build/env/bin/flake8 $?
+	flake8 $?
 	touch $@
 
 .build/jshint.timestamp: $(JS_FILES)
