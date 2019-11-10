@@ -30,3 +30,5 @@ script:
 env:
   matrix:
     secure: ksUzWo3He56TT497XjuCDnj2rIz1pIOYq5tugCwfAlWFVakbajWhcsvnlZ4n4PzgCV6JbseDDZbz4S4uQxujkumjAZ0DOsGeilOhqnyge7D5wFeKsRv2wJTBOLrCeE1GnBXnhZyjDyl69eNNxLzCuDCwrle5gTz/nddWx4waFBM=
+notifications:
+  email: false

@@ -44,10 +44,11 @@ help:
 	@echo "- routes                  Show the application routes"
 	@echo "- watch                   Run the build target when files in static dir change"
 	@echo "- extract_messages        Extract translation string and update the .pot file"
-	@echo "- transifex-push          Push translations to transifex"
-	@echo "- transifex-pull          Pull translations from transifex"
-	@echo "- transifex-import        Import po files into database"
-	@echo "- compile_catalog         Compile language files"
+	## skipping transifex step for now ##
+	# @echo "- transifex-push          Push translations to transifex"
+	# @echo "- transifex-pull          Pull translations from transifex"
+	# @echo "- transifex-import        Import po files into database"
+	# @echo "- compile_catalog         Compile language files"
 	@echo
 
 .PHONY: install
@@ -56,8 +57,8 @@ install: \
 		.build/node_modules.timestamp \
 		.build/wkhtmltox \
 		.build/phantomjs-2.1.1-linux-x86_64 \
-		buildcss \
-		compile_catalog
+		buildcss 
+		# compile_catalog
 
 .PHONY: buildcss
 buildcss: thinkhazard/static/build/index.css \
@@ -197,10 +198,8 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	# set up venv directory
 	python3 -m venv .build/env
-	
-	# debug -check dir contents (pip failing)
-	ls .build/env/bin/
 
+	# activate python virtual environment
 	. .build/env/bin/activate
 
 .build/node_modules.timestamp: package.json
@@ -302,22 +301,23 @@ extract_messages:
 	# removes the creation date to avoid unnecessary git changes
 	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
 
-$(HOME)/.transifexrc:
-	echo "[https://www.transifex.com]" > $@
-	echo "hostname = https://www.transifex.com" >> $@
-	echo "username = antoine.abt@camptocamp.com" >> $@
-	echo "password = $(TX_PWD)" >> $@
-	echo "token =" >> $@
+# Skip transifexrc step for now
+# $(HOME)/.transifexrc:
+# 	echo "[https://www.transifex.com]" > $@
+# 	echo "hostname = https://www.transifex.com" >> $@
+# 	echo "username = antoine.abt@camptocamp.com" >> $@
+# 	echo "password = $(TX_PWD)" >> $@
+# 	echo "token =" >> $@
 
-.PHONY: transifex-push
-transifex-push: $(HOME)/.transifexrc
-	tx push -s
+# .PHONY: transifex-push
+# transifex-push: $(HOME)/.transifexrc
+# 	tx push -s
 
-.PHONY: transifex-pull
-transifex-pull: $(HOME)/.transifexrc
-	tx pull
+# .PHONY: transifex-pull
+# transifex-pull: $(HOME)/.transifexrc
+# 	tx pull
 
-.PHONY: compile_catalog
-compile_catalog: $(HOME)/.transifexrc transifex-pull
-	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
-	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
+# .PHONY: compile_catalog
+# compile_catalog: $(HOME)/.transifexrc transifex-pull
+# 	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
+# 	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
