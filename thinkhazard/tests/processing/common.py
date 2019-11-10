@@ -27,6 +27,11 @@ from ...models import (
 
 def new_geonode_id():
     row = DBSession.query(func.max(Layer.geonode_id)).one_or_none()
+    print('query used:', func.max(Layer.geonode_id))
+    print('query raw:', DBSession.query(func.max(Layer.geonode_id)))
+    print('query db:', DBSession.query(Layer).all())
+    
+    print('geonode returned:', row)
     if row[0] is None:
         return 1
     return row[0] + 1

@@ -43,6 +43,7 @@ from ...processing.completing import Completer
 def populate():
     DBSession.query(Layer).delete()
     DBSession.query(HazardSet).delete()
+
     populate_datamart()
     transaction.commit()
 
@@ -122,7 +123,7 @@ class TestCompleting(unittest.TestCase):
             return_period=None,
             data_lastupdated_date=datetime.now(),
             metadata_lastupdated_date=datetime.now(),
-            geonode_id=new_geonode_id(),
+            geonode_id=2,  # new_geonode_id(),
             download_url='test',
             calculation_method_quality=5,
             scientific_quality=1,

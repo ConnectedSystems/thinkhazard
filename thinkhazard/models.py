@@ -53,11 +53,10 @@ from geoalchemy2 import Geometry
 from zope.sqlalchemy import register
 
 
-DBSession = scoped_session(sessionmaker(autoflush=False))
+DBSession = scoped_session(sessionmaker(autoflush=True))
 register(DBSession)
 
 Base = declarative_base(metadata=MetaData(schema='datamart'))
-
 
 adminleveltypes = threading.local().__dict__
 hazardlevels = threading.local().__dict__
