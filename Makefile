@@ -170,7 +170,7 @@ modwsgi: .build/apache.timestamp
 
 .PHONY: test
 test: install .build/dev-requirements.timestamp
-	.build/env/bin/nosetests
+	nosetests
 
 .PHONY: dist
 dist: .build/env
